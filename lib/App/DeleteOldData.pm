@@ -7,17 +7,19 @@ use Data::Dumper;
 # use rmtree to clean up files
 
 =item
+Constructor. Designed to process data in the following path format:
+$base_path/$dataset_name/<year>/<month>/<day>/<hour>/<files> 
 
-Constructor. Requires the following 3 arguments:
+Requires the following 2 options:
 
-dryrun          : boolean : do not actually perform the deletes
-older_than_days : integer :
+older_than_days : integer : number of days which to delete data
+base_path       : string  : as listed above in path format, required
 
+and the following 2 are optional:
 
-And one optional argument:
-
-verbose : boolean : options
-
+dryrun          : boolean : do not actually perform the deletes, but print them
+dataset_name    : string  : as listed above in path format. if not supplied
+                            all datasets will be processed
 =cut
 
 sub new {
@@ -26,8 +28,21 @@ sub new {
 
     my $self = {};
     bless $self, $class;
-
-    # verify options here
+    # verify required args
+    unless(defined $options{older_than_days} and
+           defined $options{base_path}) {
+        die "the options <older_than_days> and <base_path> are required";
+    }
+    $self->{older_than_days}= $options{older_than_days}; 
+    $self->{base_path} =  $options{base_path}; 
+    # set dryrun
+    if($options{dryrun}) {
+        $self->{dryrun} = 1;
+    }
+    # set dataset name if needed
+    if(defined $options{dataset_name}) {
+        $dataset_name} = $options{dataset_name};
+    }
 
     return $self;
 }
