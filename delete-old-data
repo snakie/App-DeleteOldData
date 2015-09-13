@@ -50,7 +50,7 @@ sub main() {
         usage();
         return 0;
     }
-    if($ARGV != 1) {
+    if(@ARGV != 1) {
         print "a single <path> argument must be provided after options\n";
         usage();
         return 1;
@@ -59,7 +59,7 @@ sub main() {
                     dryrun => $dryrun,
                     older_than_days => $older_than_days,
                     dataset_name => $dataset_name,
-                    base_path => $ARGV[0];
+                    base_path => $ARGV[0],
                   ); 
     return $deleter->process_deletes();
 }

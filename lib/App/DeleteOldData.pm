@@ -41,8 +41,9 @@ sub new {
     }
     # set dataset name if needed
     if(defined $options{dataset_name}) {
-        $dataset_name} = $options{dataset_name};
+        $self->{dataset_name} = $options{dataset_name};
     }
+    print Dumper($self);
 
     return $self;
 }
