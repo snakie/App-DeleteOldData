@@ -16,7 +16,7 @@ Prints script usage
 =cut
 
 sub usage() {
-    print <<USAGE;
+    print STDERR <<USAGE;
 Usage: $0 [options] <path>
 
 Deletes all data in an hourly partitioned hierarchy older than
@@ -58,7 +58,7 @@ sub main() {
         return 0;
     }
     if ( @ARGV != 1 ) {
-        print "a single <path> argument must be provided after options\n";
+        print STDERR "a single <path> argument must be provided after options\n";
         usage();
         return 1;
     }
