@@ -3,6 +3,7 @@ FILES=delete-old-data lib/App/DeleteOldData.pm
 all: test
 
 test: tidy critic
+	prove -lv t/*.t
 
 tidy:
 	perltidy --profile=.perltidyrc ${FILES}

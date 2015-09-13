@@ -58,7 +58,8 @@ sub main() {
         return 0;
     }
     if ( @ARGV != 1 ) {
-        print STDERR "a single <path> argument must be provided after options\n";
+        print STDERR
+          "a single <path> argument must be provided after options\n";
         usage();
         return 1;
     }
