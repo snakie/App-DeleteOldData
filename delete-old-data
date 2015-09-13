@@ -3,7 +3,7 @@
 use FindBin;
 # add local lib directory
 use lib "$FindBin::Bin/lib";
-use Getopt::Long;
+use Getopt::Long qw(:config no_ignore_case);
 
 use App::DeleteOldData;
 
@@ -31,9 +31,31 @@ Options:
 USAGE
 }
 
-sub main() {
-usage();
+=item
+Main driver function
+=cut
 
+sub main() {
+    my ($help,$dryrun,$older_than_days,$dataset_name);
+    $older_than_days = 10;
+    unless(GetOptions("help" => \$help,
+               "dry-run|n" => \$dryrun,
+               "older-than-days|d=i" => \$older_than_days, #default value 10
+               "dataset-name|D=s" => \$dataset_name,
+           )) {
+        usage(); # bad options
+        return 1;
+    }
+    if($help) {
+        usage();
+        return 0;
+    }
+    my $deleter = App::DeleteOldData->new(
+                    dryrun => $dryrun,
+                    older_than_days => $older_than_days,
+                    dataset_name => $dataset_name,
+                  ); 
+    return $deleter->process_deletes();
 }
 
 my $rc = main();
