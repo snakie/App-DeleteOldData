@@ -1,5 +1,8 @@
 package App::DeleteOldData;
 
+use strict;
+use warnings;
+
 use File::Path;
 use Data::Dumper;
 
@@ -23,24 +26,27 @@ dataset_name    : string  : as listed above in path format. if not supplied
 =cut
 
 sub new {
-    my ($class,%options) = @_;
+    my ( $class, %options ) = @_;
     print Dumper(%options);
 
     my $self = {};
     bless $self, $class;
+
     # verify required args
-    unless(defined $options{older_than_days} and
-           defined $options{base_path}) {
+    unless (defined $options{older_than_days}
+        and defined $options{base_path} ) {
         die "the options <older_than_days> and <base_path> are required";
     }
-    $self->{older_than_days}= $options{older_than_days}; 
-    $self->{base_path} =  $options{base_path}; 
+    $self->{older_than_days} = $options{older_than_days};
+    $self->{base_path}       = $options{base_path};
+
     # set dryrun
-    if($options{dryrun}) {
+    if ( $options{dryrun} ) {
         $self->{dryrun} = 1;
     }
+
     # set dataset name if needed
-    if(defined $options{dataset_name}) {
+    if ( defined $options{dataset_name} ) {
         $self->{dataset_name} = $options{dataset_name};
     }
     print Dumper($self);

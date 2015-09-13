@@ -5,7 +5,8 @@ all: test
 test: tidy critic
 
 tidy:
-	perltidy --profile .perltidyrc ${FILES}
+	perltidy --profile=.perltidyrc ${FILES}
+	git diff
 
 critic:
 	perlcritic ${FILES}
