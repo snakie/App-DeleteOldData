@@ -5,6 +5,8 @@ use warnings;
 
 use File::Path;
 use Data::Dumper;
+use Time::Piece;
+use Time::Seconds;
 
 # use rmdir to clean up empty directories
 # use rmtree to clean up files
@@ -27,7 +29,6 @@ dataset_name    : string  : as listed above in path format. if not supplied
 
 sub new {
     my ( $class, %options ) = @_;
-    print Dumper(%options);
 
     my $self = {};
     bless $self, $class;
@@ -39,6 +40,7 @@ sub new {
     }
     $self->{older_than_days} = $options{older_than_days};
     $self->{base_path}       = $options{base_path};
+    $self->{base_path} =~ s/\/$//;    # trim last slash
 
     # set dryrun
     if ( $options{dryrun} ) {
@@ -46,12 +48,56 @@ sub new {
     }
 
     # set dataset name if needed
-    if ( defined $options{dataset_name} ) {
-        $self->{dataset_name} = $options{dataset_name};
-    }
+    $self->{dataset_name} = $options{dataset_name};
+    $self->{dataset_name} = "*" unless $self->{dataset_name};
     print Dumper($self);
 
     return $self;
+}
+
+sub get_existing_path_hash {
+    my ($self) = @_;
+    my $glob =
+      join( "/", $self->{base_path}, $self->{dataset_name}, "*", "*", "*" );
+    my $paths = {};
+    foreach my $path ( glob $glob ) {
+        $path =~ s/$self->{base_path}\///;
+        my ( $dataset, $year, $month, $day ) = split /\//, $path;
+        $paths->{$dataset} = {} unless $paths->{$dataset};
+        $paths->{$dataset}->{$year} = {} unless $paths->{$dataset}->{$year};
+        $paths->{$dataset}->{$year}->{$month} = ()
+          unless $paths->{$dataset}->{$year}->{$month};
+        push @{ $paths->{$dataset}->{$year}->{$month} }, $day;
+
+    }
+    return $paths;
+}
+
+=item
+
+For a given date, discover the paths to delete based on what exists
+
+=cut
+
+sub build_paths {
+    my ( $self, $date ) = @_;
+
+}
+
+sub process_deletes {
+    my ($self) = @_;
+
+    my $existing_paths = $self->get_existing_path_hash();
+
+    print Dumper($existing_paths);
+
+    my $time = localtime;
+    my ( $min_year, $min_month, $min_day ) = $self->find_min_keep($time);
+
+    #my $date_to_delete =
+
+    #$self->delete_paths(@paths);
+
 }
 
 1;
