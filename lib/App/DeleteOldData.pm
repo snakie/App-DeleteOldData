@@ -178,6 +178,10 @@ sub process_deletes {
     # build paths to delete
     my @to_delete =
       $self->get_paths_to_delete( $min_year, $min_month, $min_day );
+    if ( @to_delete == 0 ) {
+        print STDERR "fatal: no directories found to delete\n";
+        return 0;    #fail
+    }
 
     if ( $self->{dryrun} ) {
         $self->print_dryrun(@to_delete);
