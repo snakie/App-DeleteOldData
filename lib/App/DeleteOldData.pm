@@ -129,7 +129,7 @@ DRYRUN:
   <older-than-days> : $self->{older_than_days}
   <dataset-name>    : $self->{dataset_name}
 
-The contents of the following $c paths will be completed deleted:
+The contents of the following $c paths will be completely deleted:
 DRYRUN
     foreach (@paths) {
         print "  $self->{base_path}/$_\n";
@@ -143,7 +143,8 @@ actually perform the deletion
 sub remove_paths {
     my ( $self, @paths ) = @_;
     foreach my $path (@paths) {
-        remove_tree( "$self->{'base_path'}/$path", { error => \my $err } );
+        remove_tree( $self->{'base_path'} . "/" . $path,
+            { error => \my $err } );
         if (@$err) {
             foreach my $e (@$err) {
                 my ( $file, $message ) = %$e;
@@ -184,7 +185,7 @@ sub process_deletes {
     }
 
     #remove_paths will signal success or not
-    return remove_paths(@to_delete);
+    return $self->remove_paths(@to_delete);
 }
 
 1;
