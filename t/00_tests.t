@@ -21,7 +21,7 @@ my $now = localtime(1438430400); # Aug 1st 2015 05:00:00 PDT
 my ($min_year,$min_month,$min_day) = $deleter->find_min_keep($now);
 is($min_year, "2015", "min year to keep: 2015");
 is($min_month, "07", "min month to keep: 07");
-is($min_day, "17", "min day to keep: 15");
+is($min_day, "17", "min day to keep: 17");
 
 my ($dataset,$year,$month,$day) = $deleter->clean_and_split_path("t/test_data/foo/2014/06/01");
 is($dataset, "foo", "clean and split dataset: foo");
