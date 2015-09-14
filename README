@@ -3,7 +3,11 @@
 # Notes
 
 The script reviews the current directory structure to to execute as few deletions 
-as possible. Additionally it depends on only on core Perl modules. 
+as possible. Additionally it depends only on core Perl modules. 
+
+# Tests
+
+Tests can be run by executing $ make test
 
 # Usage
 
