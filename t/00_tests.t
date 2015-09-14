@@ -43,4 +43,8 @@ $deleter = App::DeleteOldData->new( %base_options, dataset_name => "foo");
 @paths = $deleter->get_paths_to_delete($min_year,$min_month,$min_day);
 is(grep(/^bar\/2015\/07\/16$/, @paths),0, "does not contain bar/2015/07/16");
 
+#lets do it for real
+$deleter->process_deletes();
+
+
 

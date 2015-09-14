@@ -5,6 +5,7 @@ all: precommit
 precommit: tidy critic test
 
 test:
+	t/create_files.sh
 	prove -lv t/*.t
 
 tidy:

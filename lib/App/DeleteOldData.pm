@@ -3,8 +3,7 @@ package App::DeleteOldData;
 use strict;
 use warnings;
 
-use File::Path;
-use Data::Dumper;
+use File::Path qw(remove_tree);
 use Time::Piece;
 use Time::Seconds;
 
@@ -115,7 +114,6 @@ sub find_min_keep {
         sprintf( "%02d", $to_keep->mon ),
         sprintf( "%02d", $to_keep->mday )
     );
-    return ( $to_keep->year, sprintf( "%02d", $to_keep->mon ), $to_keep->mday );
 }
 
 =item
@@ -162,7 +160,7 @@ sub process_deletes {
     if ( $self->{dryrun} ) {
         $self->print_dryrun(@to_delete);
     } else {
-        $self->remove_paths(@to_delete);
+        remove_tree(@to_delete);
     }
     return 1;    #success
 }
