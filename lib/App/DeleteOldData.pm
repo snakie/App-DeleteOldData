@@ -152,6 +152,7 @@ sub remove_paths {
                 print STDERR " for file [$file]" unless $file eq '';
                 print STDERR "\n";
             }
+            print STDERR "Caught error deleting...bailing out\n";
             return 0;    # failure
         }
     }

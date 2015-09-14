@@ -1,14 +1,5 @@
 # App::DeleteOldData
 
-# Notes
-
-The script reviews the current directory structure to to execute as few 
-deletions as possible. Additionally it depends only on core Perl modules. 
-
-# Tests
-
-Tests can be run by executing $ make test
-
 # Usage
 
 $ ./delete-old-data --help
@@ -28,3 +19,11 @@ Options:
                                  pruned of old data.
   -n --dry-run                   Don't actually do anything, just output the
                                  directories that would have data deleted.
+
+# Notes
+
+Dry-run will give compact output of the directories to be deleted. No dependancies outside of core Perl modules are required. 
+
+# Tests
+
+Tests can be run by executing $ make test
