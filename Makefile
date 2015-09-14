@@ -1,8 +1,10 @@
 FILES=delete-old-data lib/App/DeleteOldData.pm
 
-all: test
+all: precommit
 
-test: tidy critic
+precommit: tidy critic test
+
+test:
 	prove -lv t/*.t
 
 tidy:

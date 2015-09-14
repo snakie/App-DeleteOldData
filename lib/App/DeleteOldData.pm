@@ -50,7 +50,6 @@ sub new {
     # set dataset name if needed
     $self->{dataset_name} = $options{dataset_name};
     $self->{dataset_name} = "*" unless $self->{dataset_name};
-    print Dumper($self);
 
     return $self;
 }
@@ -65,23 +64,25 @@ sub get_existing_path_hash {
         my ( $dataset, $year, $month, $day ) = split /\//, $path;
         $paths->{$dataset} = {} unless $paths->{$dataset};
         $paths->{$dataset}->{$year} = {} unless $paths->{$dataset}->{$year};
-        $paths->{$dataset}->{$year}->{$month} = ()
-          unless $paths->{$dataset}->{$year}->{$month};
-        push @{ $paths->{$dataset}->{$year}->{$month} }, $day;
+        $paths->{$dataset}->{$year}->{"$month"} = ()
+          unless $paths->{$dataset}->{$year}->{"$month"};
+        push @{ $paths->{$dataset}->{$year}->{"$month"} }, $day;
 
     }
+    print Dumper($paths);
     return $paths;
 }
 
 =item
 
-For a given date, discover the paths to delete based on what exists
+for a given date, determine what is the minimum date to keep
 
 =cut
 
-sub build_paths {
-    my ( $self, $date ) = @_;
-
+sub find_min_keep {
+    my ( $self, $now ) = @_;
+    my $to_keep = localtime($now - ONE_DAY * $self->{older_than_days});
+    return($to_keep->year,sprintf("%02d",$to_keep->mon),$to_keep->mday);
 }
 
 sub process_deletes {
@@ -89,9 +90,7 @@ sub process_deletes {
 
     my $existing_paths = $self->get_existing_path_hash();
 
-    print Dumper($existing_paths);
-
-    my $time = localtime;
+    my $time = localtime(time);
     my ( $min_year, $min_month, $min_day ) = $self->find_min_keep($time);
 
     #my $date_to_delete =
