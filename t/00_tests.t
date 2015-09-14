@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 14;
 use Data::Dumper;
 
 # check compile
@@ -16,18 +16,6 @@ my %base_options = (
 
 my $deleter = App::DeleteOldData->new( %base_options );
 isa_ok($deleter,"App::DeleteOldData");
-my $path_hash = $deleter->get_existing_path_hash();
-isa_ok($path_hash,"HASH");
-
-# check hash integrity
-is(scalar(keys %$path_hash), 2, "2 datasets when no dataset specified");
-is(scalar(keys %{$path_hash->{foo}->{2015}}), 3, "3 months in foo dataset");
-is(@{$path_hash->{foo}->{2015}->{"06"}}, 30, "30 days in foo/2015/06");
-
-# try with only 1 dataset
-$deleter = App::DeleteOldData->new( %base_options, dataset_name => "foo");
-$path_hash = $deleter->get_existing_path_hash();
-is(scalar(keys %$path_hash), 1, "1 dataset when foo dataset specified");
 
 # test how far back to delete
 my $now = localtime(1438430400); # Aug 1st 2015 05:00:00 PDT
@@ -35,4 +23,24 @@ my ($min_year,$min_month,$min_day) = $deleter->find_min_keep($now);
 is($min_year, "2015", "min year to keep: 2015");
 is($min_month, "07", "min month to keep: 07");
 is($min_day, "17", "min day to keep: 15");
+
+my ($dataset,$year,$month,$day) = $deleter->clean_and_split_path("t/test_data/foo/2014/06/01");
+is($dataset, "foo", "clean and split dataset: foo");
+is($year, "2014", "clean and split year: 2014");
+is($month, "06", "clean and split month: 06");
+is($day, "01", "clean and split day: 01");
+
+my @paths = $deleter->get_paths_to_delete($min_year,$min_month,$min_day);
+
+# check path integrity
+is(@paths, 34, "found 34 paths to delete");
+is(grep(/^foo\/2015\/06$/, @paths),1, "contains foo/2015/06");
+is(grep(/^bar\/2015\/07\/16$/, @paths),1, "contains bar/2015/07/16");
+is(grep(/^bar\/2015\/07\/17$/, @paths),0, "does not contain bar/2015/07/17");
+
+# try with only 1 dataset
+$deleter = App::DeleteOldData->new( %base_options, dataset_name => "foo");
+@paths = $deleter->get_paths_to_delete($min_year,$min_month,$min_day);
+is(grep(/^bar\/2015\/07\/16$/, @paths),0, "does not contain bar/2015/07/16");
+
 

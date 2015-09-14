@@ -68,7 +68,7 @@ sub main() {
         dataset_name    => $dataset_name,
         base_path       => $ARGV[0],
     );
-    return $deleter->process_deletes();
+    return 0 if $deleter->process_deletes();
 }
 
 my $rc = main();
