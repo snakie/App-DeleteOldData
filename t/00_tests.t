@@ -1,8 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 14;
-use Data::Dumper;
+use Test::More tests => 18;
 
 # check compile
 require_ok('App::DeleteOldData');
@@ -44,7 +43,10 @@ $deleter = App::DeleteOldData->new( %base_options, dataset_name => "foo");
 is(grep(/^bar\/2015\/07\/16$/, @paths),0, "does not contain bar/2015/07/16");
 
 #lets do it for real
-$deleter->process_deletes();
-
+$deleter->remove_paths(@paths);
+is(-d "t/test_data/foo/2015/06",undef,"foo/2015/06 deleted");
+is(-d "t/test_data/bar/2015/06",1,"bar/2015/06 not deleted");
+is(-d "t/test_data/foo/2015/07/16",undef,"foo/2015/07/16 deleted");
+is(-d "t/test_data/foo/2015/07/17",1,"foo/2015/07/17 not deleted");
 
 

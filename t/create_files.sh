@@ -1,6 +1,6 @@
 #!/bin/bash
 
-base_path=./test_data
+base_path=./t/test_data
 echo "creating any needed dirs..."
 for dataset in foo bar; do
     for y in 2015; do

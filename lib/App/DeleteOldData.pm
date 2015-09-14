@@ -137,6 +137,27 @@ DRYRUN
 }
 
 =item
+actually perform the deletion
+=cut
+
+sub remove_paths {
+    my ( $self, @paths ) = @_;
+    foreach my $path (@paths) {
+        remove_tree( "$self->{'base_path'}/$path", { error => \my $err } );
+        if (@$err) {
+            foreach my $e (@$err) {
+                my ( $file, $message ) = %$e;
+                print STDERR "Error: $message";
+                print STDERR " for file [$file]" if $file eq '';
+                print "\n";
+            }
+            return 0;    # failure
+        }
+    }
+    return 1;            # success
+}
+
+=item
 
 orchestrate the deletion by:
 
@@ -159,10 +180,11 @@ sub process_deletes {
 
     if ( $self->{dryrun} ) {
         $self->print_dryrun(@to_delete);
-    } else {
-        remove_tree(@to_delete);
+        return 1;
     }
-    return 1;    #success
+
+    #remove_paths will signal success or not
+    return remove_paths(@to_delete);
 }
 
 1;
