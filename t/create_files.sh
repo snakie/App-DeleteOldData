@@ -14,7 +14,7 @@ for dataset in foo bar; do
             for d in $(seq -w 1 $days); do
                # for h in $(seq -w 0 23); do
                     #dir=$base_path/$dataset/$y/$m/$d/$h
-                    dir=$base_path/$dataset/$y/$m/$d/0
+                    dir=$base_path/$dataset/$y/$m/$d/00
                     echo $dir
                     mkdir -pv $dir
                     #touch $dir/${dataset}{1,2,3}
