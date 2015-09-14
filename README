@@ -2,8 +2,8 @@
 
 # Notes
 
-The script reviews the current directory structure to to execute as few deletions 
-as possible. Additionally it depends only on core Perl modules. 
+The script reviews the current directory structure to to execute as few 
+deletions as possible. Additionally it depends only on core Perl modules. 
 
 # Tests
 
