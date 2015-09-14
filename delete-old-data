@@ -69,6 +69,7 @@ sub main() {
         base_path       => $ARGV[0],
     );
     return 0 if $deleter->process_deletes();
+    return 1;    # error
 }
 
 my $rc = main();

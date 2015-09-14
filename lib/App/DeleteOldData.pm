@@ -148,7 +148,7 @@ sub remove_paths {
         if (@$err) {
             foreach my $e (@$err) {
                 my ( $file, $message ) = %$e;
-                print STDERR "Error: $message";
+                print STDERR $message;
                 print STDERR " for file [$file]" unless $file eq '';
                 print STDERR "\n";
             }
